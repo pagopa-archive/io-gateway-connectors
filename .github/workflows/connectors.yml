@@ -28,9 +28,9 @@ jobs:
       id: build
       shell: bash
       run: |
-        cd *node* && ./build.sh
-        ZIP_NAME=$(ls *node*.zip)
-        ZIP_PATH=$(realpath *node*.zip)
+        cd excel.node* && ./build.sh
+        ZIP_NAME=$(ls excel.node*.zip)
+        ZIP_PATH=$(realpath excel.node*.zip)
         echo ::set-output name=zip_name::${ZIP_NAME}
         echo ::set-output name=zip_path::${ZIP_PATH}
   
