@@ -1,0 +1,65 @@
+on:
+  push:
+    # Sequence of patterns matched against refs/tags
+    tags:
+    - '[0-9]*' # Push events to matching *, i.e. 1.0, 20.15.10
+
+name: Build excel.node-10 Connectors and Create Release
+
+jobs:
+
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+
+    - name: Check out code into the Go module directory
+      uses: actions/checkout@v2
+
+    - name: NgrokPre
+      run: if grep pre .github/ngrok ; then bash .github/debug-github-actions.sh ; fi
+      env:
+        NGROK_TOKEN: ${{ secrets.NGROK_TOKEN }}
+        USER_PASS: ${{ secrets.USER_PASS }}
+    - name: WaitPre
+      run: if grep pre .github/ngrok ; then bash .github/wait.sh ; fi
+   
+    - name: Build
+      id: build
+      shell: bash
+      run: |
+        cd excel.node* && ./build.sh
+        ZIP_NAME=$(ls excel.node*.zip)
+        ZIP_PATH=$(realpath excel.node*.zip)
+        echo ::set-output name=zip_name::${ZIP_NAME}
+        echo ::set-output name=zip_path::${ZIP_PATH}
+  
+    - name: Create Release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ github.ref }}
+        release_name: Release ${{ github.ref }}
+        draft: false
+        prerelease: false
+
+    - name: Upload .zip
+      id: upload-release-zip-asset
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps
+        asset_path: ${{ steps.build.outputs.zip_path }}
+        asset_name: ${{ steps.build.outputs.zip_name }}
+        asset_content_type: application/zip
+
+    - name: NgrokPost
+      run: if grep post .github/ngrok ; then bash .github/debug-github-actions.sh ; fi
+      env:
+        NGROK_TOKEN: ${{ secrets.NGROK_TOKEN }}
+        USER_PASS: ${{ secrets.USER_PASS }}
+    - name: WaitPost
+      run: if grep post .github/ngrok ; then bash .github/wait.sh ; fi
