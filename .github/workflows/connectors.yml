@@ -46,6 +46,17 @@ jobs:
         echo ::set-output name=zip_php_path::${ZIP_PHP_PATH}
         cd ..
 
+    - name: Build graphql.python-3 connector
+      id: build_python
+      shell: bash
+      run: |
+        cd graphql.python* && ./build.sh
+        ZIP_PYTHON_NAME=$(ls graphql.python*.zip)
+        ZIP_PYTHON_PATH=$(realpath graphql.python*.zip)
+        echo ::set-output name=zip_python_name::${ZIP_PYTHON_NAME}
+        echo ::set-output name=zip_python_path::${ZIP_PYTHON_PATH}
+        cd ..
+
     - name: Create Release
       id: create_release
       uses: actions/create-release@v1
@@ -77,6 +88,17 @@ jobs:
         upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps
         asset_path: ${{ steps.build_php.outputs.zip_php_path }}
         asset_name: ${{ steps.build_php.outputs.zip_php_name }}
+        asset_content_type: application/zip
+
+    - name: Upload python .zip
+      id: upload-release-python-zip-asset
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps
+        asset_path: ${{ steps.build_python.outputs.zip_python_path }}
+        asset_name: ${{ steps.build_python.outputs.zip_python_name }}
         asset_content_type: application/zip
 
     - name: NgrokPost
