@@ -16,7 +16,7 @@ public class TestUtils {
     }
 
     public static String getDockerIp() {
-        return System.getProperty("io-sdk-java.docker.ip", "localhost");
+        return System.getProperty("io-gateway-java.docker.ip", "localhost");
     }
 
     public static Args buildOracleArgs() {

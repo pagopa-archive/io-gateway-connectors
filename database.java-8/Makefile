@@ -1,13 +1,11 @@
-VER?=$(shell git tag --points-at HEAD | head -1)
 DB_TYPE?=mysql
 
 .PHONY: preflight build_mysql build_oracle test release_mysql release_oracle snapshot clean deploy
 
 release:
-	test -n "$(VER)"
 	$(MAKE) build
-	#zip -rj "build/libs/io-sdk-java-$(VER)-$(DB_TYPE).zip" build/libs/io-sdk-java.jar
-	zip -rj "build/libs/$(DB_TYPE).java-8.zip" build/libs/io-sdk-java.jar
+	zip -rj "build/libs/$(DB_TYPE).java-8.zip" build/libs/io-gateway-java.jar
+
 
 release_mysql:
 	$(MAKE) DB_TYPE=mysql release
@@ -35,7 +33,7 @@ snapshot:
 	git push origin master --tags
 
 deploy:
-	wsk action update iosdk/import build/libs/io-sdk-java.jar --main Main --docker openwhisk/actionloop-java-v8:nightly
+	wsk action update iosdk/import build/libs/io-gateway-java.jar --main Main --docker openwhisk/actionloop-java-v8:nightly
 
 preflight:
 	echo "checking required versions"

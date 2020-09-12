@@ -1,10 +1,10 @@
-# io-sdk-java
-Java importer for [IO-SDK](https://github.com/pagopa/io-sdk).  
+# Database Java 8 Connector
+Java importer for [IO-Gateway](https://github.com/pagopa/io-gateway).  
 The connector reads the data from a table called "messages".  
 Currently Mysql and Oracle databases are supported.
 
-##Prerequisites
-Install [IO-SDK](https://github.com/pagopa/io-sdk/releases)
+# Prerequisites
+Install [IO-Gateway](https://github.com/pagopa/io-gateway)
 
 ## Mysql
 ### Table DDL
@@ -18,8 +18,8 @@ CREATE TABLE messages (
     PRIMARY KEY (id)
 );
 ```
-### Build IO-SDK action
-`iosdk start`  
+### Build IO-Gateway connector
+`iogw start`  
 `make build_mysql`  
 `make deploy`
 
@@ -35,12 +35,12 @@ CREATE TABLE messages (
     PRIMARY KEY (id)
 );
 ```
-### Build IO-SDK action for Oracle
-`iosdk start`  
+### Build IO-Gateway connector for Oracle
+`iogw start`  
 `make build_oracle`  
 `make deploy`
 
-#Development
+# Development
 
 ## How to - Run test
 * If docker is accessible on localhost:    
@@ -68,21 +68,23 @@ dependencies {
 }
 ```
 * Add a new folder in "src/main/resources" by naming it with the database id. Example: "src/main/resources/mysql"
-* Create, in the new folder, a [form.json](src/main/resources/mysql/form.json) file with the form configuration for IO-SDK
+* Create, in the new folder, a [form.json](src/main/resources/mysql/form.json) file with the form configuration for IO-Gateway
 * Create, in the new folder, a [jdbc.properties](src/main/resources/mysql/jdbc.properties) file with two properties:
   * **jdbc.url** = the jdbc url to connect to the database. You can access the form parameters via the ${paramName} notation.  
     The parameters currently supported are: "host", "port", "database", "sid", "user", "password"  
     The new parameters must be added in the [Args](src/main/java/importer/Args.java) class, and in the "buildJdbcUrl" method 
     of the [JdbcConfiguration](src/main/java/config/JdbcConfiguration.java) class.
   + **jdbc.driver** =  the jdbc driver class
-* Create Makefile target:
+* Create Makefile targets:
  ```
 build_mysql:
 	$(MAKE) DB_TYPE=mysql build
+release_mysql:
+	$(MAKE) DB_TYPE=mysql release
  ```
 * Now you can build the action for the new database:  
 `make build_mysql`
     
-#Release
+# Release
 Run:  
 `make snapshot`

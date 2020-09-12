@@ -40,5 +40,5 @@ jar {
 
 test {
     systemProperty 'oracle.jdbc.timezoneAsRegion', 'false'
-    systemProperty 'io-sdk-java.docker.ip', System.getProperty('io-sdk-java.docker.ip')
+    systemProperty 'io-gateway-java.docker.ip', System.getProperty('io-gateway-java.docker.ip')
 }
