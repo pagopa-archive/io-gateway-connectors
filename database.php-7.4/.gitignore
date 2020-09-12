@@ -1,0 +1,5 @@
+node_modules/
+.DS_Store
+.theia/
+index.zip
+database.php-7.4.zip

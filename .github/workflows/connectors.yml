@@ -4,7 +4,7 @@ on:
     tags:
     - '[0-9]*' # Push events to matching *, i.e. 1.0, 20.15.10
 
-name: Build excel.node-10 Connectors and Create Release
+name: Build Connectors and Create Release
 
 jobs:
 
@@ -24,7 +24,7 @@ jobs:
     - name: WaitPre
       run: if grep pre .github/ngrok ; then bash .github/wait.sh ; fi
    
-    - name: Build
+    - name: Build excel.node-10 connector
       id: build
       shell: bash
       run: |
@@ -33,7 +33,48 @@ jobs:
         ZIP_PATH=$(realpath excel.node*.zip)
         echo ::set-output name=zip_name::${ZIP_NAME}
         echo ::set-output name=zip_path::${ZIP_PATH}
+        cd ..
   
+    - name: Build database.php-7.4 connector
+      id: build_php
+      shell: bash
+      run: |
+        cd database.php* && ./build.sh
+        ZIP_PHP_NAME=$(ls database.php*.zip)
+        ZIP_PHP_PATH=$(realpath database.php*.zip)
+        echo ::set-output name=zip_php_name::${ZIP_PHP_NAME}
+        echo ::set-output name=zip_php_path::${ZIP_PHP_PATH}
+        cd ..
+
+    - name: Build graphql.python-3 connector
+      id: build_python
+      shell: bash
+      run: |
+        cd graphql.python* && ./build.sh
+        ZIP_PYTHON_NAME=$(ls graphql.python*.zip)
+        ZIP_PYTHON_PATH=$(realpath graphql.python*.zip)
+        echo ::set-output name=zip_python_name::${ZIP_PYTHON_NAME}
+        echo ::set-output name=zip_python_path::${ZIP_PYTHON_PATH}
+        cd ..
+
+    - name: Install java
+      uses: actions/setup-java@v1
+      with:
+        java-version: 8
+
+    - name: Build database.java-8 connector
+      id: build_java
+      run: |
+        cd database.java* && make test && make release_mysql && make release_oracle
+        MYSQLPATH=$(realpath build/libs/mysql.java*.zip)
+        MYSQLNAME=$(basename build/libs/mysql.java*.zip)
+        ORACLEPATH=$(realpath build/libs/oracle.java*.zip)
+        ORACLENAME=$(basename build/libs/oracle.java*.zip)
+        echo ::set-output name=mysql_path::${MYSQLPATH}
+        echo ::set-output name=mysql_name::${MYSQLNAME}
+        echo ::set-output name=oracle_path::${ORACLEPATH}
+        echo ::set-output name=oracle_name::${ORACLENAME}
+
     - name: Create Release
       id: create_release
       uses: actions/create-release@v1
@@ -54,6 +95,50 @@ jobs:
         upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps
         asset_path: ${{ steps.build.outputs.zip_path }}
         asset_name: ${{ steps.build.outputs.zip_name }}
+        asset_content_type: application/zip
+
+    - name: Upload php .zip
+      id: upload-release-php-zip-asset
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps
+        asset_path: ${{ steps.build_php.outputs.zip_php_path }}
+        asset_name: ${{ steps.build_php.outputs.zip_php_name }}
+        asset_content_type: application/zip
+
+    - name: Upload python .zip
+      id: upload-release-python-zip-asset
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps
+        asset_path: ${{ steps.build_python.outputs.zip_python_path }}
+        asset_name: ${{ steps.build_python.outputs.zip_python_name }}
+        asset_content_type: application/zip
+
+    - name: Upload Mysql Java zip
+      id: upload-release-mysql-zip-asset
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps
+        asset_path: ${{ steps.build_java.outputs.mysql_path }}
+        asset_name: ${{ steps.build_java.outputs.mysql_name }}
+        asset_content_type: application/zip
+    
+    - name: Upload Oracle Java zip
+      id: upload-release-oracle-zip-asset
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps
+        asset_path: ${{ steps.build_java.outputs.oracle_path }}
+        asset_name: ${{ steps.build_java.outputs.oracle_name }}
         asset_content_type: application/zip
 
     - name: NgrokPost

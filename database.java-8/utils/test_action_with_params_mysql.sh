@@ -1,0 +1,1 @@
+wsk action invoke --result iosdk/import --param host 192.168.1.150 --param port 3306 --param database test --param user root --param password root

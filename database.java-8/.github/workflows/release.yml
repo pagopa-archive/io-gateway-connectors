@@ -1,0 +1,69 @@
+name: Create Release and Upload Assets
+
+on:
+  push:
+    # Sequence of patterns matched against refs/tags
+    tags:
+    - '[0-9]*' # Push events to matching *, i.e. 1.0, 20.15.10
+
+jobs:
+  build:
+    name: Release
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v2
+        
+      - name: Install java
+        uses: actions/setup-java@v1
+        with:
+          java-version: 8
+
+      - name: Build
+        id: build
+        run: |
+          make test
+          make release_mysql
+          make release_oracle
+          MYSQLPATH=$(ls build/libs/io-sdk-java-*-mysql.zip)
+          MYSQLNAME=$(basename build/libs/io-sdk-java-*-mysql.zip)
+          ORACLEPATH=$(ls build/libs/io-sdk-java-*-oracle.zip)
+          ORACLENAME=$(basename build/libs/io-sdk-java-*-oracle.zip)
+          echo ::set-output name=mysql_path::${MYSQLPATH}
+          echo ::set-output name=mysql_name::${MYSQLNAME}
+          echo ::set-output name=oracle_path::${ORACLEPATH}
+          echo ::set-output name=oracle_name::${ORACLENAME}
+      
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
+          draft: false
+          prerelease: false
+      
+      - name: Upload Mysql zip
+        id: upload-release-mysql-zip-asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps
+          asset_path: ${{ steps.build.outputs.mysql_path }}
+          asset_name: ${{ steps.build.outputs.mysql_name }}
+          asset_content_type: application/zip
+      
+      - name: Upload Oracle zip
+        id: upload-release-oracle-zip-asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps
+          asset_path: ${{ steps.build.outputs.oracle_path }}
+          asset_name: ${{ steps.build.outputs.oracle_name }}
+          asset_content_type: application/zip
