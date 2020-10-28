@@ -1,9 +1,5 @@
-create database test;
-
-use test;
-
 CREATE TABLE messages (
-    id int NOT NULL AUTO_INCREMENT,
+    id SERIAL NOT NULL,
     amount bigint,
     due_date date NOT NULL,
     fiscal_code varchar(16) NOT NULL,

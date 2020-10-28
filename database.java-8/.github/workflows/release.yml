@@ -26,14 +26,24 @@ jobs:
           make test
           make release_mysql
           make release_oracle
-          MYSQLPATH=$(realpath build/libs/mysql.java*.zip)
-          MYSQLNAME=$(basename build/libs/mysql.java*.zip)
-          ORACLEPATH=$(realpath build/libs/oracle.java*.zip)
-          ORACLENAME=$(basename build/libs/oracle.java*.zip)
+          make release_sqlserver
+          make release_postgresql
+          MYSQLPATH=$(realpath build/distributions/mysql.java*.zip)
+          MYSQLNAME=$(basename build/distributions/mysql.java*.zip)
+          ORACLEPATH=$(realpath build/distributions/oracle.java*.zip)
+          ORACLENAME=$(basename build/distributions/oracle.java*.zip)
+          SQLSERVERPATH=$(realpath build/distributions/sqlserver.java*.zip)
+          SQLSERVERNAME=$(basename build/distributions/sqlserver.java*.zip)
+          POSTGRESQLPATH=$(realpath build/distributions/postgresql.java*.zip)
+          POSTGRESQLNAME=$(basename build/distributions/postgresql.java*.zip)
           echo ::set-output name=mysql_path::${MYSQLPATH}
           echo ::set-output name=mysql_name::${MYSQLNAME}
           echo ::set-output name=oracle_path::${ORACLEPATH}
           echo ::set-output name=oracle_name::${ORACLENAME}
+          echo ::set-output name=sqlserver_path::${SQLSERVERPATH}
+          echo ::set-output name=sqlserver_name::${SQLSERVERNAME}
+          echo ::set-output name=postgresql_path::${POSTGRESQLPATH}
+          echo ::set-output name=postgresql_name::${POSTGRESQLNAME}
       
       - name: Create Release
         id: create_release
@@ -66,4 +76,26 @@ jobs:
           upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps
           asset_path: ${{ steps.build.outputs.oracle_path }}
           asset_name: ${{ steps.build.outputs.oracle_name }}
+          asset_content_type: application/zip
+
+      - name: Upload SQL Server zip
+        id: upload-release-sqlserver-zip-asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps
+          asset_path: ${{ steps.build.outputs.sqlserver_path }}
+          asset_name: ${{ steps.build.outputs.sqlserver_name }}
+          asset_content_type: application/zip
+
+      - name: Upload PostgreSQL zip
+        id: upload-release-postgresql-zip-asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps
+          asset_path: ${{ steps.build.outputs.postgresql_path }}
+          asset_name: ${{ steps.build.outputs.postgresql_name }}
           asset_content_type: application/zip

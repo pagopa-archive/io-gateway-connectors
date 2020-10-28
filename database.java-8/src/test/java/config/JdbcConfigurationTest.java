@@ -66,4 +66,56 @@ public class JdbcConfigurationTest {
 
         new Importer(args).loadMessages();
     }
+
+    @Test
+    public void testJdbcUrlSQLServer(){
+        Args args = TestUtils.buildSQLServerArgs();
+
+        String url = new JdbcConfiguration("sqlserver").buildJdbcUrl(args);
+
+        assertEquals("jdbc:sqlserver://" + TestUtils.getDockerIp() + ":1433;databaseName=test", url);
+    }
+
+    @Test
+    public void testConnectionSQLServer() throws SQLException {
+        Args args = TestUtils.buildSQLServerArgs();
+
+        Connection connection = new JdbcConfiguration("sqlserver").getConnection(args);
+
+        assertTrue(connection.isValid(1));
+    }
+
+    @Test(expected =ImportException.class)
+    public void testConnectionErrorSQLServer() {
+        Args args = TestUtils.buildSQLServerArgs();
+        args.setPort("1234");
+
+        new Importer(args).loadMessages();
+    }
+
+    @Test
+    public void testJdbcUrlPostgreSQL(){
+        Args args = TestUtils.buildPostgreSQLArgs();
+
+        String url = new JdbcConfiguration("postgresql").buildJdbcUrl(args);
+
+        assertEquals("jdbc:postgresql://" + TestUtils.getDockerIp() + ":5432/test", url);
+    }
+
+    @Test
+    public void testConnectionPostgreSQL() throws SQLException {
+        Args args = TestUtils.buildPostgreSQLArgs();
+
+        Connection connection = new JdbcConfiguration("postgresql").getConnection(args);
+
+        assertTrue(connection.isValid(1));
+    }
+
+    @Test(expected =ImportException.class)
+    public void testConnectionErrorPostgreSQL() {
+        Args args = TestUtils.buildPostgreSQLArgs();
+        args.setPort("1234");
+
+        new Importer(args).loadMessages();
+    }
 }

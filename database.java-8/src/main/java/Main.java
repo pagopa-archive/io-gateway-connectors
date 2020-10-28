@@ -1,4 +1,5 @@
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import config.Configuration;
@@ -7,6 +8,7 @@ import domain.Message;
 import importer.Args;
 import importer.Importer;
 
+import java.text.DateFormat;
 import java.util.List;
 
 public class Main {
@@ -24,7 +26,10 @@ public class Main {
 
             List<Message> messages = importer.loadMessages();
 
-            JsonElement jsonMessages = new Gson().toJsonTree(messages);
+            JsonElement jsonMessages = new GsonBuilder()
+                    .setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+                    .create()
+                    .toJsonTree(messages);
             return createResponse(createDataResponse(jsonMessages));
         } catch (Exception e) {
             return createErrorResponse(e.getMessage());

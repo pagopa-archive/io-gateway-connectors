@@ -1,13 +1,16 @@
 ALTER SESSION SET CURRENT_SCHEMA = system;
 
 CREATE TABLE messages (
-    id NUMBER NOT NULL,
-    scadenza date NOT NULL,
-    destinatario VARCHAR2(16) NOT NULL,
-    testo VARCHAR2(1000) NOT NULL,
-    titolo VARCHAR2(100) NOT NULL,
+    id number NOT NULL,
+    amount number,
+    due_date date NOT NULL,
+    fiscal_code VARCHAR2(16) NOT NULL,
+    invalid_after_due_date number(1) NOT NULL,
+    markdown clob NOT NULL,
+    notice_number VARCHAR2(18) NOT NULL,
+    subject VARCHAR2(100) NOT NULL,
     PRIMARY KEY (id)
 );
 
-INSERT INTO messages (id, scadenza, destinatario, testo, titolo) VALUES (1, TO_DATE ('2020-11-30', 'yyyy-mm-dd') , 'ISPXNB32R82Y766F', '# Welcome, Giovanni Rossi. Your fiscal code is ISPXNB32R82Y766F. I hope you will enjoy IO.', 'Welcome to IO, Giovanni');
-INSERT INTO messages (id, scadenza, destinatario, testo, titolo) VALUES (2, TO_DATE ('2020-12-31', 'yyyy-mm-dd') , 'ISPXNB32R82Y766D', '# Welcome, Luca Rossi. Your fiscal code is ISPXNB32R82Y766D. I hope you will enjoy IO.', 'Welcome to IO, Luca');
+INSERT INTO messages VALUES (1, 0, TO_DATE ('2020-11-30', 'yyyy-mm-dd') , 'ISPXNB32R82Y766F', 0, '# Welcome, Giovanni Rossi. Your fiscal code is ISPXNB32R82Y766F. I hope you will enjoy IO.', '1', 'Welcome to IO, Giovanni');
+INSERT INTO messages VALUES (2, 0, TO_DATE ('2020-12-31', 'yyyy-mm-dd') , 'ISPXNB32R82Y766D', 0, '# Welcome, Luca Rossi. Your fiscal code is ISPXNB32R82Y766D. I hope you will enjoy IO.', '1', 'Welcome to IO, Luca');

@@ -36,6 +36,20 @@ public class Importer {
                     || args.getUser() == null
                     || args.getPassword() == null;
         }
+        if("sqlserver".equals(args.getDatabaseType())) {
+            return args.getHost() == null
+                    || args.getDatabase() == null
+                    || args.getPort() == null
+                    || args.getUser() == null
+                    || args.getPassword() == null;
+        }
+        if("postgresql".equals(args.getDatabaseType())) {
+            return args.getHost() == null
+                    || args.getPort() == null
+                    || args.getDatabase() == null
+                    || args.getUser() == null
+                    || args.getPassword() == null;
+        }
         return false;
     }
 
@@ -45,23 +59,17 @@ public class Importer {
         JdbcConfiguration jdbcConfiguration = new JdbcConfiguration(args.getDatabaseType());
         try (Connection connection = jdbcConfiguration.getConnection(args)) {
             stmt = connection.createStatement();
-            String selectSql = "SELECT 0 AS amount,\n" +
-                    "scadenza AS due_date,\n" +
-                    "destinatario AS fiscal_code,\n" +
-                    "0 AS invalid_after_due_date,\n" +
-                    "testo AS markdown,\n" +
-                    "1 AS notice_number,\n" +
-                    "titolo AS subject FROM messages";
+            String selectSql = "SELECT * FROM messages";
             ResultSet resultSet = stmt.executeQuery(selectSql);
 
             while (resultSet.next()) {
                 Message msg = new Message(
                     resultSet.getInt("amount"),
-                    resultSet.getDate("due_date").getTime(),
+                    resultSet.getDate("due_date"),
                     resultSet.getString("fiscal_code"),
                     resultSet.getBoolean("invalid_after_due_date"),
                     resultSet.getString("markdown"),
-                    resultSet.getInt("notice_number"),
+                    resultSet.getString("notice_number"),
                     resultSet.getString("subject"));
                 messages.add(msg);
             }

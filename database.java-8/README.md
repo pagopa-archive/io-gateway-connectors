@@ -7,14 +7,20 @@ Currently Mysql and Oracle databases are supported.
 Install [IO-Gateway](https://github.com/pagopa/io-gateway)
 
 ## Mysql
+
+Compatible with versions 5.6, 5.7, 8.0.
+
 ### Table DDL
 ```
 CREATE TABLE messages (
     id int NOT NULL AUTO_INCREMENT,
-    scadenza date NOT NULL,
-    destinatario varchar(16) NOT NULL,
-    testo varchar(1000) NOT NULL,
-    titolo varchar(100) NOT NULL,
+    amount bigint,
+    due_date date NOT NULL,
+    fiscal_code varchar(16) NOT NULL,
+    invalid_after_due_date boolean NOT NULL,
+    markdown varchar(10000) NOT NULL,
+    notice_number varchar(18) NOT NULL,
+    subject varchar(100) NOT NULL,
     PRIMARY KEY (id)
 );
 ```
@@ -24,20 +30,73 @@ CREATE TABLE messages (
 `make deploy`
 
 ## Oracle
+
+Compatible with versions 19.x, 18.3, 12.2, 12.1, 11.2.0.4
+
 ### Table DDL
 ```
 CREATE TABLE messages (
-    id NUMBER NOT NULL,
-    scadenza date NOT NULL,
-    destinatario VARCHAR2(16) NOT NULL,
-    testo VARCHAR2(1000) NOT NULL,
-    titolo VARCHAR2(100) NOT NULL,
+    id number NOT NULL,
+    amount number,
+    due_date date NOT NULL,
+    fiscal_code VARCHAR2(16) NOT NULL,
+    invalid_after_due_date number(1) NOT NULL,
+    markdown clob NOT NULL,
+    notice_number VARCHAR2(18) NOT NULL,
+    subject VARCHAR2(100) NOT NULL,
     PRIMARY KEY (id)
 );
 ```
 ### Build IO-Gateway connector for Oracle
 `iogw start`  
 `make build_oracle`  
+`make deploy`
+
+
+## SQL Server
+
+Compatible with versions SQL Server 2019, SQL Server 2017, SQL Server 2016, SQL Server 2014, SQL Server 2012.
+
+### Table DDL
+```
+CREATE TABLE messages (
+    id int NOT NULL IDENTITY,
+    amount bigint,
+    due_date date NOT NULL,
+    fiscal_code varchar(16) NOT NULL,
+    invalid_after_due_date bit NOT NULL,
+    markdown text NOT NULL,
+    notice_number varchar(18) NOT NULL,
+    subject varchar(100) NOT NULL,
+    PRIMARY KEY (id)
+);
+```
+### Build IO-Gateway action for SQL Server
+`iogw start`  
+`make build_sqlserver`  
+`make deploy`
+
+## PostgreSQL
+
+Compatible with versions 8.2 and higher.
+
+### Table DDL
+```
+CREATE TABLE messages (
+    id SERIAL NOT NULL,
+    amount bigint,
+    due_date date NOT NULL,
+    fiscal_code varchar(16) NOT NULL,
+    invalid_after_due_date boolean NOT NULL,
+    markdown varchar(10000) NOT NULL,
+    notice_number varchar(18) NOT NULL,
+    subject varchar(100) NOT NULL,
+    PRIMARY KEY (id)
+);
+```
+### Build IO-Gateway action for PostgreSQL
+`iogw start`  
+`make build_postgresql`  
 `make deploy`
 
 # Development
@@ -75,6 +134,7 @@ dependencies {
     The new parameters must be added in the [Args](src/main/java/importer/Args.java) class, and in the "buildJdbcUrl" method 
     of the [JdbcConfiguration](src/main/java/config/JdbcConfiguration.java) class.
   + **jdbc.driver** =  the jdbc driver class
+* Configure required parameters in the method "showForm" of [Importer](src/main/java/importer/Importer.java)
 * Create Makefile targets:
  ```
 build_mysql:
