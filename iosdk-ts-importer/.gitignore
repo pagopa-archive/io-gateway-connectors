@@ -1,0 +1,14 @@
+node_modules/
+.DS_Store
+.theia/
+index.zip
+notes.txt
+
+.npm/
+.cache/
+.config/
+.yarn/
+.wskprops
+
+dist/
+index-1.zip
