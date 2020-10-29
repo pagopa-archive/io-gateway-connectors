@@ -12,3 +12,9 @@ notes.txt
 
 dist/
 index-1.zip
+
+credentials*.json
+token*.json
+commands.txt
+test-data/test-credentials.json
+test-data/test-token.json
