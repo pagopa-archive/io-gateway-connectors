@@ -1,6 +1,8 @@
 #!/bin/bash
 cd "$(dirname $0)"
 
+rm main.zip
+
 cd "src"
 
 zip -r ../main.zip *
