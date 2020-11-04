@@ -10,7 +10,7 @@ func TestReadForm(t *testing.T) {
 		t.Errorf("Form is nil")
 	}
 	if len(form) != 3 {
-		t.Errorf("Form config should contain 5 fields but rather it contains %v fields", len(form))
+		t.Errorf("Form config should contain 3 fields but rather it contains %v fields", len(form))
 	}
 	var note FormField
 	for _, v := range form {

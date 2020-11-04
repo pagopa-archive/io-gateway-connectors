@@ -1,5 +1,7 @@
 package main
 
+import "encoding/json"
+
 const configString = `{
 	"time_to_live": 3600,
 	"column_field_map": {
@@ -21,6 +23,12 @@ const configString = `{
 		"required": true
 	  },
 	  {
+		"name": "dbName",
+		"description": "Database",
+		"type": "string",
+		"required": true
+	  },
+	  {
 		"name": "collection",
 		"description": "Collection",
 		"type": "string",
@@ -28,3 +36,9 @@ const configString = `{
 	  }
 	]
   }`
+
+func config() map[string]interface{} {
+	var cfg map[string]interface{}
+	json.Unmarshal([]byte(configString), &cfg)
+	return cfg
+}

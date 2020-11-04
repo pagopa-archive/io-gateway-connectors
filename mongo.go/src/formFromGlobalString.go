@@ -4,16 +4,11 @@
 
 package main
 
-import (
-	"encoding/json"
-)
+// readFormAsMapsStatic reads form data from config and returns it in form of slide of maps
+func readFormAsMapsStatic() []map[string]interface{} {
+	config := config()
 
-// ReadFormAsMapsStatic reads form data from config and returns it in form of slide of maps
-func ReadFormAsMapsStatic() []map[string]interface{} {
-	var result map[string]interface{}
-	json.Unmarshal([]byte(configString), &result)
-
-	_form := result["form"].([]interface{})
+	_form := config["form"].([]interface{})
 	form := make([]map[string]interface{}, 0)
 	for _, v := range _form {
 		form = append(form, v.(map[string]interface{}))
@@ -26,7 +21,7 @@ func ReadFormAsMapsStatic() []map[string]interface{} {
 func respForFormStatic() map[string]interface{} {
 	body := make(map[string]interface{})
 	form := make(map[string]interface{})
-	form["form"] = ReadFormAsMapsStatic()
+	form["form"] = readFormAsMapsStatic()
 	body["body"] = form
 	return body
 }

@@ -1,34 +1,31 @@
 package main
 
 import (
-	"fmt"
 	"testing"
 )
 
-func TestReadFormAsMapStatic(t *testing.T) {
-	form := ReadFormAsMapsStatic()
+func TestReadFormAsMap(t *testing.T) {
+	form := ReadFormAsMaps()
 	if form == nil {
 		t.Errorf("Form is nil")
 	}
 	if len(form) != 3 {
-		t.Errorf("Form config should contain 5 fields but rather it contains %v fields", len(form))
+		t.Errorf("Form config should contain 3 fields but rather it contains %v fields", len(form))
 	}
-	var note map[string]interface{}
-	// fmt.Println("note>>>>>", reflect.TypeOf(note))
+	var message map[string]interface{}
 	for _, v := range form {
 		if v["name"] == "note" {
-			note = v
+			message = v
 		}
 	}
-	if note["name"] == "" {
+	if message["name"] == "" {
 		t.Errorf("Form field note not found")
 	}
 
 }
 
-func TestRespForFormStatic(t *testing.T) {
-	resp := respForFormStatic()
-	fmt.Println("resp static >>>>>>>", resp)
+func TestRespForForm(t *testing.T) {
+	resp := respForForm()
 	body := resp["body"]
 	if body == nil {
 		t.Errorf("Body is nil")
@@ -39,7 +36,7 @@ func TestRespForFormStatic(t *testing.T) {
 		t.Errorf("Form is nil - %v", form)
 	}
 	var note map[string]interface{}
-	// fmt.Println("note>>>>>", reflect.TypeOf(note))
+	// fmt.Println("Note>>>>>", reflect.TypeOf(note))
 	for _, v := range form.([]map[string]interface{}) {
 		fieldDesc := v
 		if fieldDesc["name"] == "note" {
@@ -50,6 +47,6 @@ func TestRespForFormStatic(t *testing.T) {
 		t.Errorf("Form field note not found")
 	}
 	if note["name"] != "note" {
-		t.Errorf("Form field note has not the expected name bur rather %v - %v - %v - %v", note["name"], note, form, body)
+		t.Errorf("Form field note has not the expected name but rather %v - %v - %v - %v", note["name"], note, form, body)
 	}
 }
