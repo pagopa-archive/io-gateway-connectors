@@ -99,6 +99,7 @@ jobs:
         OUTPUT="$PREFIX$DATA$POSTFIX"
         
         echo $OUTPUT > index.json
+        cat index.json
         
     - name: Add Binary Connectors to Repo
       id: add_binary_connectors_to_repo
@@ -122,6 +123,7 @@ jobs:
           git config user.email "actions@users.noreply.github.com"
           git remote add publisher "${remote_repo}"
           git show-ref # useful for debugging
+          git fetch
           git branch --verbose
           # install lfs hooks
           git lfs install
