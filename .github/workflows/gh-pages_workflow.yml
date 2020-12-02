@@ -72,7 +72,7 @@ jobs:
       id: build_go_mongo
       shell: bash
       run: |
-        cd mongo.go && ./build.sh
+        cd mongo.go && bash build.sh
         ZIP_GO_NAME=$(ls mongo.go*.zip)
         ZIP_GO_PATH=$(realpath mongo.go*.zip)
         echo ::set-output name=zip_go_name::${ZIP_GO_NAME}

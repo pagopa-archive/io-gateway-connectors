@@ -1,7 +1,7 @@
 #!/bin/bash
 cd "$(dirname $0)"
 ZIP_FILE=$(basename $(pwd)).zip
-rm main.zip
+rm $ZIP_FILE
 
 cd "src"
 
