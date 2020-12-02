@@ -1,0 +1,6 @@
+.env-test
+main.zip
+commands.txt
+
+pkg/
+src/iosdkmongo/vendor
