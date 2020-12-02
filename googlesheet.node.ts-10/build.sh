@@ -5,9 +5,9 @@ if ! test -d node_modules
 then echo "downloading libraries, please wait..."
      npm install
 fi
-if ! test -f index.zip 
+if ! test -f $ZIP_FILE 
 then echo "preparing archive, please wait..."
-     zip -qr index.zip node_modules
+     zip -qr $ZIP_FILE node_modules
 fi
 npm run tsc
 cd dist
