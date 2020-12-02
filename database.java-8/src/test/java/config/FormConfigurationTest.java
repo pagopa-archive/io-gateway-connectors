@@ -25,4 +25,22 @@ public class FormConfigurationTest {
         JsonElement form = jsonObject.get("form");
         assertNotNull(form);
     }
+
+    @Test
+    public void testLoadSQLServer(){
+        JsonObject jsonObject = new FormConfiguration().load("sqlserver");
+
+        assertNotNull(jsonObject);
+        JsonElement form = jsonObject.get("form");
+        assertNotNull(form);
+    }
+
+    @Test
+    public void testLoadPostgreSQL(){
+        JsonObject jsonObject = new FormConfiguration().load("postgresql");
+
+        assertNotNull(jsonObject);
+        JsonElement form = jsonObject.get("form");
+        assertNotNull(form);
+    }
 }

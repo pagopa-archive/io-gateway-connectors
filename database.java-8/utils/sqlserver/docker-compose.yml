@@ -1,0 +1,10 @@
+version: "3"
+services:
+  sqlserver:
+    build: ./init
+    ports:
+      - "1433:1433"
+    environment:
+      - SA_PASSWORD=StrongPassword1
+      - MSSQL_PID=Express
+      - ACCEPT_EULA=Y
