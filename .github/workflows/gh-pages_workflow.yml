@@ -56,6 +56,28 @@ jobs:
         echo ::set-output name=zip_python_name::${ZIP_PYTHON_NAME}
         echo ::set-output name=zip_python_path::${ZIP_PYTHON_PATH}
         cd ..
+        
+    - name: Build Node-GoogleSheet
+      id: build_node_googlesheet
+      shell: bash
+      run: |
+        cd googlesheet.node* && ./build.sh
+        ZIP_NODE_GOOGLESHEET_NAME=$(ls main.zip)
+        ZIP_NODE_GOOGLESHEET_PATH=$(realpath main.zip)
+        echo ::set-output name=zip_node_googlesheet_name::${ZIP_NODE_GOOGLESHEET_NAME}
+        echo ::set-output name=zip_node_googlesheet_path::${ZIP_NODE_GOOGLESHEET_PATH}
+        cd ..        
+
+    - name: Build Go-Mongo
+      id: build_go_mongo
+      shell: bash
+      run: |
+        cd mongo.go && ./build.sh
+        ZIP_GO_NAME=$(ls main.zip)
+        ZIP_GO_PATH=$(realpath main.zip)
+        echo ::set-output name=zip_go_name::${ZIP_GO_NAME}
+        echo ::set-output name=zip_go_path::${ZIP_GO_PATH}
+        cd ..
 
     - name: Install java
       uses: actions/setup-java@v1
@@ -82,28 +104,6 @@ jobs:
         echo ::set-output name=sqlserver_name::${SQLSERVERNAME}
         echo ::set-output name=postgresql_path::${POSTGRESQLPATH}
         echo ::set-output name=postgresql_name::${POSTGRESQLNAME}
-
-    - name: Build Go-Mongo
-      id: build_go_mongo
-      shell: bash
-      run: |
-        cd mongo.go && ./build.sh
-        ZIP_GO_NAME=$(ls main.zip)
-        ZIP_GO_PATH=$(realpath main.zip)
-        echo ::set-output name=zip_go_name::${ZIP_GO_NAME}
-        echo ::set-output name=zip_go_path::${ZIP_GO_PATH}
-        cd ..
-
-    - name: Build Node-GoogleSheet
-      id: build_node_googlesheet
-      shell: bash
-      run: |
-        cd googlesheet.node* && ./build.sh
-        ZIP_NODE_GOOGLESHEET_NAME=$(ls main.zip)
-        ZIP_NODE_GOOGLESHEET_PATH=$(realpath main.zip)
-        echo ::set-output name=zip_node_googlesheet_name::${ZIP_NODE_GOOGLESHEET_NAME}
-        echo ::set-output name=zip_node_googlesheet_path::${ZIP_NODE_GOOGLESHEET_PATH}
-        cd ..
     
     - name: Create Connectors Json
       id: create_connectors_json
