@@ -83,6 +83,28 @@ jobs:
         echo ::set-output name=postgresql_path::${POSTGRESQLPATH}
         echo ::set-output name=postgresql_name::${POSTGRESQLNAME}
 
+    - name: Build Go-Mongo
+      id: build_go_mongo
+      shell: bash
+      run: |
+        cd mongo.go && ./build.sh
+        ZIP_GO_NAME=$(ls main.zip)
+        ZIP_GO_PATH=$(realpath main.zip)
+        echo ::set-output name=zip_go_name::${ZIP_GO_NAME}
+        echo ::set-output name=zip_go_path::${ZIP_GO_PATH}
+        cd ..
+
+    - name: Build Node-GoogleSheet
+      id: build_node_googlesheet
+      shell: bash
+      run: |
+        cd googlesheet.node* && ./build.sh
+        ZIP_NODE_GOOGLESHEET_NAME=$(ls main.zip)
+        ZIP_NODE_GOOGLESHEET_PATH=$(realpath main.zip)
+        echo ::set-output name=zip_node_googlesheet_name::${ZIP_NODE_GOOGLESHEET_NAME}
+        echo ::set-output name=zip_node_googlesheet_path::${ZIP_NODE_GOOGLESHEET_PATH}
+        cd ..
+    
     - name: Create Connectors Json
       id: create_connectors_json
       run: |
@@ -99,7 +121,6 @@ jobs:
         OUTPUT="$PREFIX$DATA$POSTFIX"
         
         echo $OUTPUT > index.json
-        cat index.json
         
     - name: Add Binary Connectors to Repo
       id: add_binary_connectors_to_repo
@@ -116,7 +137,7 @@ jobs:
           if [ -z "${BRANCH_NAME}" ]; then
              export BRANCH_NAME=master
           fi
-          # initialize git
+          
           remote_repo="https://${GITHUB_ACTOR}:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
           git config http.sslVerify false
           git config user.name "Automated Publisher"
@@ -125,9 +146,9 @@ jobs:
           git show-ref # useful for debugging
           git fetch
           git branch --verbose
-          # install lfs hooks
+          
           git lfs install
-          # publish any new files
+          
           git checkout ${BRANCH_NAME}
           git add index.json
           git add *.zip
