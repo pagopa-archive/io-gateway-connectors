@@ -23,6 +23,35 @@ jobs:
         USER_PASS: ${{ secrets.USER_PASS }}
     - name: WaitPre
       run: if grep pre .github/ngrok ; then bash .github/wait.sh ; fi
+
+    - name: Checkout to github-pages branch
+      id: checkout_to_gh_pages_branch
+      env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+          BRANCH_NAME: 'gh-pages' 
+      run: |
+          #!/bin/sh
+          # check values
+          if [ -z "${GITHUB_TOKEN}" ]; then
+              echo "error: not found GITHUB_TOKEN"
+              exit 1
+          fi
+          if [ -z "${BRANCH_NAME}" ]; then
+             export BRANCH_NAME=master
+          fi
+          
+          remote_repo="https://${GITHUB_ACTOR}:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+          git config http.sslVerify false
+          git config user.name "Automated Publisher"
+          git config user.email "actions@users.noreply.github.com"
+          git remote add publisher "${remote_repo}"
+          git show-ref # useful for debugging
+          git fetch
+          git branch --verbose
+          
+          git lfs install
+          
+          git checkout ${BRANCH_NAME}
    
     - name: Build excel.node-10 connector
       id: build
@@ -112,20 +141,6 @@ jobs:
              export BRANCH_NAME=master
           fi
           
-          remote_repo="https://${GITHUB_ACTOR}:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
-          git config http.sslVerify false
-          git config user.name "Automated Publisher"
-          git config user.email "actions@users.noreply.github.com"
-          git remote add publisher "${remote_repo}"
-          git show-ref # useful for debugging
-          git fetch
-          git branch --verbose
-          
-          git lfs install
-          
-          git stash
-          git checkout ${BRANCH_NAME}
-          git stash apply
           git add index.json
           git add *.zip
           timestamp=$(date -u)
