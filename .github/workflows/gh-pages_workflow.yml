@@ -2,7 +2,7 @@ on:
   push:
     # Sequence of patterns matched against refs/tags
     branches:
-      - dev/action_to_gh-pages
+      - master
 
 name: Build Connectors and Create Release
 
