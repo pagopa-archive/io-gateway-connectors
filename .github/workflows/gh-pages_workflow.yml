@@ -150,6 +150,7 @@ jobs:
              export BRANCH_NAME=master
           fi
           
+          find . -type f -name 'package-lock.json' -exec rm -f {} \;
           git checkout ${BRANCH_NAME}
             
           git add index.json
