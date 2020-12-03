@@ -52,6 +52,13 @@ jobs:
           git lfs install
           
           git checkout ${BRANCH_NAME}
+          
+          rm -rf ./*
+          git add -A
+          git commit -m "Cleaned GithubPages"
+          
+          git checkout ${GITHUB_REF##*/}          
+          
    
     - name: Build excel.node-10 connector
       id: build
@@ -141,6 +148,8 @@ jobs:
              export BRANCH_NAME=master
           fi
           
+          git checkout ${BRANCH_NAME}
+            
           git add index.json
           git add *.zip
           timestamp=$(date -u)
