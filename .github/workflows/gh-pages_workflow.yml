@@ -52,6 +52,7 @@ jobs:
           git lfs install
           
           git checkout ${BRANCH_NAME}
+          git stash
           
           rm -rf ./*
           git add -A
