@@ -57,7 +57,7 @@ jobs:
           git add -A
           git commit -m "Cleaned GithubPages"
           
-          git checkout ${GITHUB_REF##*/}          
+          git checkout ${GITHUB_REF}          
           
    
     - name: Build excel.node-10 connector
