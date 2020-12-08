@@ -1,0 +1,39 @@
+{
+  "form": [
+    {
+      "type": "message",
+      "name": "note",
+      "description": "Connect to Salesforce to import messages"
+    },
+    {
+      "name": "salesforceLoginUrl",
+      "description": "Salesforce Login URL",
+      "type": "string",
+      "required": true
+    },
+    {
+      "name": "username",
+      "description": "Salesforce Username",
+      "type": "string",
+      "required": true
+    },
+    {
+      "name": "password",
+      "description": "Salesforce Password",
+      "type": "string",
+      "required": true
+    },
+    {
+      "name": "clientId",
+      "description": "Salesforce Client Id",
+      "type": "string",
+      "required": true
+    },
+    {
+      "name": "clientSecret",
+      "description": "Salesforce Client Secret",
+      "type": "string",
+      "required": true
+    }
+  ]
+}
