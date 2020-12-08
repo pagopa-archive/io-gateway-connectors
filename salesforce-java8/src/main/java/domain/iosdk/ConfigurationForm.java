@@ -49,11 +49,11 @@ public class ConfigurationForm {
     }
 
     public boolean isNotComplete(){
-        return ( this.getClientId() == null
-                || this.getClientSecret() == null
-                || this.getUsername() == null
-                || this.getPassword() == null
-                || this.getSalesforceLoginUrl() == null
+        return ( this.getClientId() == null || this.getClientId().length() == 0
+                || this.getClientSecret() == null  || this.getClientSecret().length() == 0
+                || this.getUsername() == null  || this.getUsername().length() == 0
+                || this.getPassword() == null  || this.getPassword().length() == 0
+                || this.getSalesforceLoginUrl() == null  || this.getSalesforceLoginUrl().length() == 0
         );
     }
 }

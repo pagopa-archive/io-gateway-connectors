@@ -26,7 +26,7 @@ public class SalesforceConnector {
                 return buildDataResponse(messages);
             }
         } catch (Exception e) {
-            return buildErrorResponse("Si è verificato un errore durante il caricamento dei dati");
+            return buildErrorResponse(e.getMessage());
         }
     }
 

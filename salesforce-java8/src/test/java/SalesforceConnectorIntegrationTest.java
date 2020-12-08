@@ -14,10 +14,10 @@ public class SalesforceConnectorIntegrationTest {
 
     @Test
     public void testEnd2EndWithoutNullPayload() throws Exception {
-        String payload = "{}";
-        JsonObject jsonObjectPayload = new Gson().fromJson( payload, JsonObject.class );
-        JsonObject jsonObjectResponse = SalesforceConnector.main( jsonObjectPayload );
+        JsonObject jsonObjectResponse = SalesforceConnector.main( null );
+        System.out.println( new Gson().toJson(jsonObjectResponse));
         assertNotNull( jsonObjectResponse.get("body") );
+        assertNotNull( jsonObjectResponse.get("body").getAsJsonObject().get("form") );
         assertNull( jsonObjectResponse.get("body").getAsJsonObject().get("error") );
         assertNull( jsonObjectResponse.get("body").getAsJsonObject().get("data") );
     }
@@ -26,8 +26,10 @@ public class SalesforceConnectorIntegrationTest {
     public void testEnd2EndWithoutEmptyPayload() throws Exception {
         String payload = "{}";
         JsonObject jsonObjectPayload = new Gson().fromJson( payload, JsonObject.class );
-        JsonObject jsonObjectResponse = SalesforceConnector.main( jsonObjectPayload );
+        JsonObject jsonObjectResponse = SalesforceConnector.main( null );
+        System.out.println( new Gson().toJson(jsonObjectResponse));
         assertNotNull( jsonObjectResponse.get("body") );
+        assertNotNull( jsonObjectResponse.get("body").getAsJsonObject().get("form") );
         assertNull( jsonObjectResponse.get("body").getAsJsonObject().get("error") );
         assertNull( jsonObjectResponse.get("body").getAsJsonObject().get("data") );
     }
@@ -35,11 +37,13 @@ public class SalesforceConnectorIntegrationTest {
 
     @Test
     public void testEnd2EndWithWrongConfiguration() throws Exception {
-        String payload = "{clientId: \"test\", clientSecret: \"test\", password: \"test\", salesforceLoginUrl: \"test\", username: \"test\"}";
+        String payload = "{\"clientId\":\"\",\"clientSecret\":\"\",\"password\":\"\",\"salesforceLoginUrl\":\"https://login.salesforce.com/services/oauth2/token\",\"username\":\"\"}";
         JsonObject jsonObjectPayload = new Gson().fromJson( payload, JsonObject.class );
         JsonObject jsonObjectResponse = SalesforceConnector.main( jsonObjectPayload );
+        System.out.println( new Gson().toJson(jsonObjectResponse));
         assertNotNull( jsonObjectResponse.get("body") );
-        assertNotNull( jsonObjectResponse.get("body").getAsJsonObject().get("error") );
+        assertNotNull( jsonObjectResponse.get("body").getAsJsonObject().get("form") );
+        assertNull( jsonObjectResponse.get("body").getAsJsonObject().get("error") );
         assertNull( jsonObjectResponse.get("body").getAsJsonObject().get("data") );
     }
 
@@ -49,7 +53,9 @@ public class SalesforceConnectorIntegrationTest {
                 new InputStreamReader(this.getClass().getResourceAsStream("/payload.json")));
         JsonObject jsonObjectPayload = new Gson().fromJson(reader, JsonObject.class);
         JsonObject jsonObjectResponse = SalesforceConnector.main(jsonObjectPayload );
+        System.out.println( new Gson().toJson(jsonObjectResponse));
         assertNotNull( jsonObjectResponse.get("body") );
+        assertNull( jsonObjectResponse.get("body").getAsJsonObject().get("form") );
         assertNotNull( jsonObjectResponse.get("body").getAsJsonObject().get("data") );
         assertNull( jsonObjectResponse.get("body").getAsJsonObject().get("error") );
     }
