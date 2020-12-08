@@ -4,7 +4,7 @@ Salesforce importer for [IO-Gateway](https://github.com/pagopa/io-gateway).
 The connector reads the data from an custom Salesforce Object named "**Message**".
 
 # Prerequisites
--
+
 ### IO-Gateway installation
 Install [IO-Gateway](https://github.com/pagopa/io-gateway)
 
@@ -100,7 +100,7 @@ wsk action update iosdk/import target/iosdk-salesforce-java.zip  --main Salesfor
 
 ### Import and Verify the messages
 
-Login in Salesforce and create the messages:
+Login in Salesforce and create a few messages:
 
 ![Message](images/messages.png)
 
