@@ -58,7 +58,7 @@ cd io-gateway-connectors/salesforce-java8
 mvn clean test
 ```
 
-##### Run the integration tests [OPTIONAL]
+##### Run the integration tests [**OPTIONAL**]
 The integration tests verifies the end2end integration with a Real Salesforce Org/Sandbox.
 
 To run the integration tests you need to provide your credentials into the file src/test/resources/payload.json
@@ -78,7 +78,7 @@ then run:
 mvn verify -Pintegration-test
 ```
 
-If the test fails verify the provided credentials and the Custome Message Object in your Salesforce Org/Sandbox.
+If the test fails verify the provided the credentials and the Custome Message Object in your Salesforce Org/Sandbox.
 
 ##### Create a Deployment package
 ```
