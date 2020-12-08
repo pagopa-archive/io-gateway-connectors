@@ -1,3 +1,7 @@
 mongo.go/.env-test
 mongo.go/main.zip
 mongo.go/commands.txt
+.idea/
+target/
+*.iml
+**/payload-local.json
