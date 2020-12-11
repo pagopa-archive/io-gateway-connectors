@@ -152,7 +152,7 @@ jobs:
         for asset in $ASSETS
         do
           filename=$( basename $asset)
-          config=$( cat $(dirname $asset)/ow_config.json )
+          config=$( cat $( echo "$asset" | cut -d "/" -f2)/ow_config.json )
           DATA="$DATA{\"name\":\"${filename}\",\"file_path\":\"${asset}\",\"config\":${config}},"
         done
         POSTFIX="]"
