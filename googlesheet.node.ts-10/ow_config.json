@@ -1,6 +1,6 @@
 {
     "main": "main",
-    "kind": "node:10",
+    "kind": "nodejs:10",
     "image": "",
     "params": [
         {
