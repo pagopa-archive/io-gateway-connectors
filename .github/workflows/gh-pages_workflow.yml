@@ -2,7 +2,7 @@ on:
   push:
     # Sequence of patterns matched against refs/tags
     branches:
-      - dev/action_to_gh-pages
+      - master
 
 name: Build Connectors and Create Release
 
@@ -52,6 +52,15 @@ jobs:
           git lfs install
           
           git checkout ${BRANCH_NAME}
+          git stash
+          
+          rm -rf ./*
+          git status
+          git add -A
+          git commit -m "Cleaned GithubPages"
+          
+          git checkout ${GITHUB_REF}          
+          
    
     - name: Build excel.node-10 connector
       id: build
@@ -107,6 +116,32 @@ jobs:
         echo ::set-output name=zip_go_name::${ZIP_GO_NAME}
         echo ::set-output name=zip_go_path::${ZIP_GO_PATH}
         cd ..
+        
+    - name: Install java
+      uses: actions/setup-java@v1
+      with:
+        java-version: 8
+
+    - name: Build database.java-8 connector
+      id: build_java
+      run: |
+        cd database.java* && make test && make release_mysql && make release_oracle && make release_sqlserver && make release_postgresql
+        MYSQLPATH=$(realpath build/distributions/mysql.java*.zip)
+        MYSQLNAME=$(basename build/distributions/mysql.java*.zip)
+        ORACLEPATH=$(realpath build/distributions/oracle.java*.zip)
+        ORACLENAME=$(basename build/distributions/oracle.java*.zip)
+        SQLSERVERPATH=$(realpath build/distributions/sqlserver.java*.zip)
+        SQLSERVERNAME=$(basename build/distributions/sqlserver.java*.zip)
+        POSTGRESQLPATH=$(realpath build/distributions/postgresql.java*.zip)
+        POSTGRESQLNAME=$(basename build/distributions/postgresql.java*.zip)
+        echo ::set-output name=mysql_path::${MYSQLPATH}
+        echo ::set-output name=mysql_name::${MYSQLNAME}
+        echo ::set-output name=oracle_path::${ORACLEPATH}
+        echo ::set-output name=oracle_name::${ORACLENAME}
+        echo ::set-output name=sqlserver_path::${SQLSERVERPATH}
+        echo ::set-output name=sqlserver_name::${SQLSERVERNAME}
+        echo ::set-output name=postgresql_path::${POSTGRESQLPATH}
+        echo ::set-output name=postgresql_name::${POSTGRESQLNAME}
     
     - name: Create Connectors Json
       id: create_connectors_json
@@ -142,6 +177,9 @@ jobs:
              export BRANCH_NAME=master
           fi
           
+          find . -type f -name 'package-lock.json' -exec rm -f {} \;
+          git checkout ${BRANCH_NAME}
+            
           git add index.json
           git add *.zip
           timestamp=$(date -u)
