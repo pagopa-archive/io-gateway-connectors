@@ -1,0 +1,11 @@
+{
+    "main": "main",
+    "kind": "node:10",
+    "image": "",
+    "params": [
+        {
+            "value": "file",
+            "description": "Base64 File"
+        }
+    ]
+}

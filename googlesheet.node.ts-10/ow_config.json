@@ -1,0 +1,23 @@
+{
+    "main": "main",
+    "kind": "node:10",
+    "image": "",
+    "params": [
+        {
+            "value": "credentials",
+            "description": "Google Credentials"
+        },
+        {
+            "value": "token",
+            "description": "Google Authentication Token"
+        },
+        {
+            "value": "spreadsheetid",
+            "description": "Google Spreadsheet ID"
+        },
+        {
+            "value": "sheetname",
+            "description": "Google Spreadsheet name"
+        }
+    ]
+}

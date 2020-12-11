@@ -1,3 +1,4 @@
 mongo.go/.env-test
 mongo.go/main.zip
 mongo.go/commands.txt
+index.json
