@@ -1,0 +1,19 @@
+{
+    "main": "main",
+    "kind": "go:1.11",
+    "image": "",
+    "params": [
+        {
+            "value": "mongoUrl",
+            "description": "MongoDB Host URL"
+        },
+        {
+            "value": "dbName",
+            "description": "Database Name"
+        },
+        {
+            "value": "collection",
+            "description": "Collection Name"
+        }
+    ]
+}
