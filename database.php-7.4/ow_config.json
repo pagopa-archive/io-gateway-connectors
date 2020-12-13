@@ -1,0 +1,5 @@
+{
+    "main": "main",
+    "kind": "php:7.4",
+    "image": ""
+}

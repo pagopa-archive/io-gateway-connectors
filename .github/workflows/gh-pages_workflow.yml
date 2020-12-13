@@ -2,7 +2,7 @@ on:
   push:
     # Sequence of patterns matched against refs/tags
     branches:
-      - master
+      - dev/action_to_gh-pages
 
 name: Build Connectors and Create Release
 
@@ -152,7 +152,8 @@ jobs:
         for asset in $ASSETS
         do
           filename=$( basename $asset)
-          DATA="$DATA{\"name\":\"${filename}\",\"file_path\":\"${asset}\"},"
+          config=$( cat $( echo "$asset" | cut -d "/" -f2)/ow_config.json )
+          DATA="$DATA{\"name\":\"${filename}\",\"file_path\":\"${asset}\",\"config\":${config}},"
         done
         POSTFIX="]"
         DATA=${DATA::${#DATA}-1}

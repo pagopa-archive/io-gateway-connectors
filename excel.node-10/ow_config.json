@@ -1,0 +1,5 @@
+{
+    "main": "main",
+    "kind": "nodejs:10",
+    "image": ""
+}
