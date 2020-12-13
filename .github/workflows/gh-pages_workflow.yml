@@ -27,7 +27,7 @@ jobs:
     - name: Checkout to github-pages branch
       id: checkout_to_gh_pages_branch
       env:
-          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           BRANCH_NAME: 'gh-pages' 
       run: |
           #!/bin/sh
@@ -164,7 +164,7 @@ jobs:
     - name: Add Binary Connectors to Repo
       id: add_binary_connectors_to_repo
       env:
-          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           BRANCH_NAME: 'gh-pages' 
       run: |
           #!/bin/sh
