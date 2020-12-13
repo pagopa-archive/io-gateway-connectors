@@ -1,0 +1,5 @@
+{
+    "main": "Main",
+    "kind": "blackbox",
+    "image": "openwhisk/actionloop-java-v8:nightly"
+}

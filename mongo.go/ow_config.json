@@ -1,0 +1,5 @@
+{
+    "main": "main",
+    "kind": "go:1.11",
+    "image": ""
+}
