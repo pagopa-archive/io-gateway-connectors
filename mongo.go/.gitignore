@@ -1,5 +1,6 @@
 .env-test
 main.zip
+mongo.go.zip
 commands.txt
 
 pkg/

@@ -1,13 +1,14 @@
 #!/bin/bash
+echo "Creating Mongo zip package"
 cd "$(dirname $0)"
-
-rm main.zip
+ZIP_FILE=$(basename $(pwd)).zip
+rm $ZIP_FILE
 
 cd "src"
 
-zip -r ../main.zip *
+zip -r ../$ZIP_FILE *
 
 cd ..
 
-wsk action update iosdk/import main.zip --kind go:1.11 --web true
+#wsk action update iosdk/import main.zip --kind go:1.11 --web true
  

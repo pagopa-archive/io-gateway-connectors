@@ -5,3 +5,4 @@ mongo.go/commands.txt
 target/
 *.iml
 **/payload-local.json
+index.json
