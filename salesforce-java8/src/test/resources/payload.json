@@ -1,0 +1,7 @@
+{
+   "salesforceLoginUrl" : "https://login.salesforce.com/services/oauth2/token",
+   "username":"<Put your username>",
+   "password" : "<Put your password>",
+   "clientId" : "<Put your client_id>",
+   "clientSecret" : "<Put your client_secret>"
+}
